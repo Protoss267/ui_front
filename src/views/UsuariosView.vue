@@ -53,8 +53,8 @@
         <td class="text-center">{{ item.name }}</td>
         <td class="text-center">{{ item.username }}</td>
         <td class="text-center">{{ item.isAdmin }}</td>
-        <td class="text-center">{{ item.created }}</td>
-        <td class="text-center">{{ item.updated }}</td>
+        <td class="text-center">{{ item.created.date }}</td>
+        <td class="text-center">{{ item.updated.date }}</td>
         <td class="text-center">
           <button @click="openEditModal(item)" class="mr-3"><v-icon small>mdi-pencil</v-icon></button>
         
@@ -163,7 +163,7 @@
             sm="6"
             >
             <v-checkbox
-      v-model="userEdit.admin"
+      v-model="userEdit.isAdmin"
       label="Administrador?"
       color="primary"
     ></v-checkbox>
@@ -339,7 +339,7 @@ export default {
       usuario:'',
       pass:'',
       pass1:'',
-      admin: false,
+      isAdmin: false,
       
     },
     userCreate:{
@@ -388,11 +388,12 @@ export default {
 
       openEditModal(user)
       {
+        console.log(user);
        this.userEdit={
             id:user.id,
             name:user.name,
             usuario:user.username,
-            admin:user.isAdmin,
+            isAdmin:user.isAdmin,
             pass:'',
             pass1:''
        }
@@ -404,7 +405,7 @@ export default {
       },
       async submitEditForm(){
         const res= await auth.updateUser(this.userEdit.usuario,
-        this.userEdit.name,this.userEdit.pass,this.userEdit.admin,this.userEdit.id);
+        this.userEdit.name,this.userEdit.pass,this.userEdit.isAdmin,this.userEdit.id);
         console.log(res);
         this.closeEditModal()
         this.showAlert()
@@ -458,14 +459,17 @@ export default {
           this.closeAlert();
         },this.timeoutDuration)
       },
+
       closeAlert(){
         this.changes=false
         clearTimeout(this.timerId)
       },
+
       openDialog(user){
         this.usuarioDele=user
         this.$refs.Modal.dialog=true
       },
+
       async deleteUser(user){
         const respuesta = await auth.deleteUser(user.id)
         if(respuesta.status)

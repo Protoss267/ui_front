@@ -57,12 +57,12 @@
         >
           <td class="text-center">{{ a+1 }}</td>
           <td class="text-center">{{ item.codigo }}</td>
-          <td class="text-center">{{ item.nombre }}</td>
-          <td class="text-center">{{ item.coste }}</td>
-          <td class="text-center">{{ item.precio }}</td>
-          <td class="text-center">{{ item.existencia }}</td>
-          <td class="text-center">{{ item.fecha }}</td>
-          <td class="text-center">{{ item.updated }}</td>
+          <td class="text-center">{{ item.name }}</td>
+          <td class="text-center">{{ item.priceI }}</td>
+          <td class="text-center">{{ item.priceF }}</td>
+          <td class="text-center">{{ item.stock }}</td>
+          <td class="text-center">{{ item.dateIn }}</td>
+          <td class="text-center">{{ item.dateUp }}</td>
           <td class="text-center">
             <button @click="openEditModal(item)" class="mr-3"><v-icon small>mdi-pencil</v-icon></button>
           
@@ -248,7 +248,7 @@
                 <v-text-field
                   color="primary"
                   label="Nombre del producto*"
-                  v-model="productCreate.nombre"
+                  v-model="productCreate.name"
                 ></v-text-field>
               </v-col>
               </v-row>
@@ -264,7 +264,7 @@
                   label="Precio de coste*"
                   type="number"
                   required
-                  v-model="productCreate.coste"
+                  v-model="productCreate.priceI"
                 ></v-text-field>
               </v-col>
               </v-row>
@@ -279,7 +279,7 @@
                   label="Precio de venta*"
                   type="number"
                   required
-                  v-model="productCreate.precio"
+                  v-model="productCreate.priceF"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -294,7 +294,7 @@
                   label="Existencia*"
                   type="number"
                   required
-                  v-model="productCreate.existencia"
+                  v-model="productCreate.stock"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -359,10 +359,10 @@
       productCreate:{
         id:'',
         codigo:'',
-        nombre:'',
-        coste:'',
-        precio:'',
-        existencia: '',
+        name:'',
+        priceI:'',
+        priceF:'',
+        stock: '',
         
       },
       changes:false,
@@ -387,15 +387,20 @@
             this.loading=true
               const res = await auth.getProducts();
               
-              console.log(res);
+              console.log(res.data.data);
               this.loading=false
-              this.list=res.data
+              this.list=res.data.data
               
               
               //console.log('Algo salio mal en el if');
               
           }catch(error)
           {
+            this.loading=false;
+            this.showAlert()
+          this.tex='Ha ocurrido un error obteniendo los datos'
+          this.titu='Algo salio mal'
+          this.typ='error'
               console.log('Algo salio mal');
           }
         },
@@ -433,10 +438,10 @@
         async submitCreateForm(){
           const res= await auth.createProduct(
             this.productCreate.codigo,
-            this.productCreate.nombre,
-            this.productCreate.coste,
-            this.productCreate.precio,
-            this.productCreate.existencia
+            this.productCreate.name,
+            this.productCreate.priceI,
+            this.productCreate.priceF,
+            this.productCreate.stock
           )
           console.log(res);
           this.closeCreatedModal()

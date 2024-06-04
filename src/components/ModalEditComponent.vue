@@ -83,7 +83,7 @@
             sm="6"
             >
             <v-checkbox
-      :v-model="userEdit.admin"
+      :v-model="user.isAdmin"
       label="Administrador?"
       color="primary"
     ></v-checkbox>
@@ -125,7 +125,8 @@ export default {
             dialog:false,
             user:{
                 id:'',
-                name:''
+                name:'',
+                isAdmin:false
             }
             
         }
@@ -134,14 +135,15 @@ export default {
         userEdit:{
             id:'',
             name:'',
-           
+           isAdmin: false
         },
     },
     methods:{
         editUsuario(){
             this.user={
                 id:this.userEdit.id,
-                name:this.userEdit.name
+                name:this.userEdit.name,
+                isAdmin:this.userEdit.isAdmin
             }
             this.$emit('editar',this.user)
             this.CloseDialog()

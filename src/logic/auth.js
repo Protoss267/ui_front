@@ -11,7 +11,7 @@ export default{
   },
     login(username, password) {
         const user = { username, password }
-        return axios.post(ENDPOINT_PATH + 'login', user)
+        return axios.post(ENDPOINT_PATH + 'login_check', user)
       },
       logout()
       {
@@ -33,10 +33,12 @@ export default{
         return axios.post(ENDPOINT_PATH + 'admin/userCreate',usuarioC)
       },
       getUserLogged(){
-        return jwtDecode(localStorage.getItem('jwtToken')).username;
+        const username= jwtDecode(localStorage.getItem('jwtToken')).username;
+        return axios.get(ENDPOINT_PATH + 'admin/userByUsername/' + username)
+        
       },
       getProducts(){
-        return axios.get(ENDPOINT_PATH + 'producto/list')
+        return axios.get(ENDPOINT_PATH + 'product/list')
       },
       updateProdut(codigo,nombre,precioI,precioF,total,id){
         const productoU={
@@ -48,21 +50,28 @@ export default{
         }
         return axios.put(ENDPOINT_PATH + 'producto/edit/' + id,productoU)
       },
-      createProduct(codigo,nombre,precioI,precioF,total){
+      createProduct(codigo,name,priceI,priceF,stock){
         const productoC={
           codigo,
-          nombre,
-          precioI,
-          precioF,
-          total
+          name,
+          priceI,
+          priceF,
+          stock
         }
-        return axios.post(ENDPOINT_PATH + 'producto/create',productoC)
+        return axios.post(ENDPOINT_PATH + 'product/create',productoC)
       },
       deleteProducto(id){
-        return axios.delete(ENDPOINT_PATH + 'producto/delete/' + id)
+        return axios.delete(ENDPOINT_PATH + 'product/delete/' + id)
       },
       getProductos()
       {
         return axios.get(ENDPOINT_PATH + 'producto/list');
       },
+      getOneProduct(codigo){
+        return axios.get(ENDPOINT_PATH + 'product/get/' + codigo)
+      },
+      vender(products,transfer){
+        const ven={products,transfer}
+        return axios.post(ENDPOINT_PATH + 'sold/create',ven)
+      }
 }

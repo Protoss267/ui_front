@@ -27,36 +27,31 @@
             color="brown"
               size="large"
             >
-              <span class="text-h5">{{ user.initials }}</span>
+              <span class="text-h6"><b>{{ usuario.initials }}</b></span>
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
           <v-card-text>
-            <div class="mx-auto text-center">
+            <div class="mx-auto text-center pb-2">
               <v-avatar
                 color="brown"
               >
-                <span class="text-h5"><b>{{ user.initials }}</b></span>
+                <span class="text-h6"><b>{{ usuario.initials }}</b></span>
               </v-avatar>
-              <h3>{{ User }}</h3>
+              <h3>{{ usuario.name }}</h3>
               <p class="text-caption mt-1">
-                {{ user.email }}
+                Usuario: {{ usuario.username }}
               </p>
-              <v-divider class="my-3"></v-divider>
-              <v-btn
-                variant="text"
-                rounded
-              >
-                Edit Account
-              </v-btn>
+              
+              
               <v-divider class="my-3"></v-divider>
               <v-btn
                 variant="text"
                 rounded
                 @click="cerrar"
               >
-                Disconnect
+                Salir
               </v-btn>
             </div>
           </v-card-text>
@@ -80,7 +75,7 @@
         prepend-icon="mdi-account-circle"
           
         >
-        {{ User }}
+        {{  }}
       </v-list-item>
 
         <v-divider></v-divider>
@@ -110,27 +105,41 @@ export default {
         return {
             toggle: null,
             dialog:false,
+            usuario:'',
             user: {
         initials: 'JD',
         fullName: 'John Doe',
-        email: 'john.doe@doe.com',
+        usuario: 'john.doe@doe.com',
       },
-            
-        }
-    },
-    methods:{
+        }       
+        
+    }, 
+
+
+    methods: {
         cerrar(){
             auth.logout()
             this.$router.replace('/login')
         },
 
+        async getUser(){
+          try{
+            const res= await auth.getUserLogged()
+            console.log(res.data.data)
+            this.usuario=res.data.data[0]
+          }catch(e){
+            console.log('Algo salio mal')
+          }
+        },
+
     },
-    computed:{
-      User(){
-        return auth.getUserLogged();
-      }
+    mounted(){
+      this.getUser()
+    },
+    
         
-    }
+    
+
 }
 </script>
 
