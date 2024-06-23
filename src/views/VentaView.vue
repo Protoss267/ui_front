@@ -159,8 +159,8 @@ cols="4"
         <td>{{ sold.sold.amount }}</td>
       </tr>
       <tr>
-        <td colspan="1">Importe Total</td>
-        <td>{{ this.solds.total }}</td>
+        <td colspan="2">Importe Total</td>
+        <td>{{ this.ventaT }}</td>
       </tr>
     </tbody>
   </v-table>
@@ -321,6 +321,7 @@ async listVenta(){
             {console.log(res.data.data);
             this.loading=false
             this.solds=res.data.data
+            this.ventaT=res.data.total
             }
             else
             console.log('Algo salio mal en el if');
