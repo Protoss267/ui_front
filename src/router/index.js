@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import UsuariosView from '../views/UsuariosView.vue'
 import ProductosView from '../views/ProductosView.vue'
 import VentaView from '@/views/VentaView.vue'
+import VentaListView from '@/views/VentasListView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/venta',
     name: 'Venta',
     component: VentaView
+  },
+  {
+    path: '/ventaList',
+    name: 'VentaList',
+    component: VentaListView
   },
   {
     path: '/about',

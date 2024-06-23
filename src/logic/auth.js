@@ -73,5 +73,8 @@ export default{
       vender(products,transfer){
         const ven={products,transfer}
         return axios.post(ENDPOINT_PATH + 'sold/create',ven)
+      },
+      listSold(){
+        return axios.get(ENDPOINT_PATH + 'sold/listDay')
       }
 }
