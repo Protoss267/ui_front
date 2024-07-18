@@ -8,56 +8,27 @@
   <router-view/>
 
   <v-row >
-    <v-col cols="6">
-      <v-card
-  class="mx-2 my-2"
-  title="Productos"
-  >
-  <v-divider></v-divider>
- 
- <loading v-if="loadingProduct"></loading>
- <v-row>
-  <v-col cols="6">
-<v-card class="my-3 mx-3 py-3 px-3" elevation="3">
-  
-<v-text-field label="Codigo" type="text" ref="codigo" v-model="codigo"
-append-inner-icon="mdi-magnify"
-@change="buscarProducto"
-    ></v-text-field>
-
-  <v-text-field label="Cantidad" type="number" ref="cantidad" :max=item.existencia v-model="cant"
-    :hint="hint"
-    ></v-text-field>
-    
-  </v-card>
-</v-col>
-  
-  
-  <v-col cols="5">
-<v-btn
-  class=" my-5 mx-5"
-  rounded="xl" 
-  size="x-large"
-  block color="indigo-darken-3"
-  prepend-icon="mdi-cart-plus" 
-  @click="agregarProducto">
-  Agregar Productos</v-btn>
-</v-col>
-</v-row>
-  </v-card>
-    </v-col>
-
-
-
-
-
-  <v-col cols="6">
+  <v-col cols="12">
   <v-card class="my-5 mx-5">
     <v-card-title>Procesar Venta</v-card-title>
     <v-divider></v-divider>
     <v-card-text >
       <loading v-if="loadingVenta"></loading>
-      <v-row>
+      
+        <v-row>
+          <v-col cols="6">
+        <v-text-field label="Codigo" type="text" ref="codigo" v-model="codigo"
+append-inner-icon="mdi-magnify"
+@change="buscarProducto"
+    ></v-text-field>
+    </v-col>
+  <v-col cols="6">
+  <v-text-field label="Cantidad" type="number" ref="cantidad" :max=item.existencia v-model="cant"
+    :hint="hint"
+    @change="agregarProducto"
+    ></v-text-field>
+    </v-col>
+    
         <v-col
   cols="4"
   >
@@ -69,14 +40,14 @@ append-inner-icon="mdi-magnify"
 <v-col
 cols="4"
 >
-<v-btn rounded="xl" size="x-large" block color="indigo-darken-3" prepend-icon="mdi-plus" @click="venta">Agregar Venta</v-btn>
+<v-btn rounded="xl" size="x-large" block color="indigo-darken-3" prepend-icon="mdi-plus" @click="venta" :disable="vB">Agregar Venta</v-btn>
 </v-col>
       </v-row>
      </v-card-text>
   </v-card>
 </v-col>
 </v-row>
-  <v-card>
+  <v-card class="my-5 mx-5">
     <v-card-title>Lista de Productos</v-card-title>
     <v-divider></v-divider>
     <v-card-text >
@@ -210,7 +181,8 @@ export default {
             loadingVenta:false,
             ventaT:0,
             coste:0,
-            ganancia:0
+            ganancia:0,
+            stock:0,
             
         }
     },
@@ -222,6 +194,12 @@ export default {
  });
       return this.total;
       },
+
+      vB(){
+        if(this.items.length>0)
+        return false
+      return true
+      }
       
     },
 
@@ -232,23 +210,46 @@ export default {
     },
     methods:{
     async buscarProducto(){
+      this.item=[]
+      this.hint=''
     if(this.codigo==''){
       this.alert=true
           this.tex='Debe especificar un codigo'
           this.typ='error'
           this.titu='Algo salio mal'
+          this.$nextTick(() => {
+          this.$refs.codigo.focus();
+          });
     }
     else{
       try{
       this.loadingProduct=true
         const resp = await auth.getOneProduct(this.codigo)
-        console.log(resp.data.data);
         this.loadingProduct=false
-        this.item=resp.data.data[0]
+        if(resp.data.success)
+        {
+          this.item=resp.data.data[0]
+        this.stock=this.item.stock
         this.hint='Existencia del producto: ' + this.item.stock.toString()
         this.$nextTick(() => {
-    this.$refs.cantidad.focus();
-  });
+        this.$refs.cantidad.focus();
+        this.cant=''
+        console.log(this.items);
+      });
+        }else
+        {
+          this.loadingProduct=false
+          this.alert=true
+          this.tex="El producto no se encuentra en el sistema"
+          this.typ='error'
+          this.titu='Algo salio mal'
+          this.codigo=''
+          this.$nextTick(() => {
+          this.$refs.codigo.focus();
+          });
+        }
+        
+
        }catch(e){
           this.alert=true
           this.tex=e.toString()
@@ -259,12 +260,31 @@ export default {
     }
   },
   agregarProducto(){
-    if(this.cant==''){
-      this.alert=true
+    if(this.cant=='' || this.cant > this.stock)
+    {
+      
+      if(this.cant==''){
+        this.alert=true
           this.tex='Debe especificar una cantidad'
           this.typ='error'
           this.titu='Algo salio mal'
+          this.$nextTick(() => {
+        this.$refs.cantidad.focus();
+      });
+      }
+     if(this.cant > this.stock){
+        this.alert=true
+          this.tex='No se puede vender una cantidad mayor a la existente'
+          this.typ='error'
+          this.titu='Algo salio mal'
+          this.$nextTick(() => {
+        this.$refs.cantidad.focus();
+      });
+      }
+     
+      
     }else
+    {
     this.carrito={
       codigo:this.codigo,
       cantidad:this.cant,
@@ -281,10 +301,11 @@ export default {
     }
     this.codigo=''
     this.cant=''
+    this.hint=''
     this.$nextTick(() => {
     this.$refs.codigo.focus();
   });
-    
+}
   },
   remove(item)
   {
@@ -295,6 +316,14 @@ export default {
   });
 },
 async venta(){
+  if(this.item.length==0)
+  {
+    this.alert=true
+          this.tex='No hay productos para vender'
+          this.typ='error'
+          this.titu='Algo salio mal'
+  }
+  else{
   this.items.forEach(element => {
     this.producto={codigo:element.codigo,amount:element.cantidad}
     this.productos.push(this.producto)
@@ -302,8 +331,8 @@ async venta(){
  try{
   this.loadingVenta=true
   const res=await auth.vender(this.productos,this.checkbox1)
-  console.log(res);
-  this.loadingVenta=false
+  if(res.data.success){
+    this.loadingVenta=false
   this.alert=true
           this.tex='La venta se ha realizado'
           this.typ='success'
@@ -312,13 +341,25 @@ async venta(){
           this.productos=[]
           this.total=0
           this.items=[]
+  }else
+  {
+    this.alert=true
+          this.tex="No hay productos para vender"
+          this.typ='error'
+          this.titu='Algo salio mal'
+          this.loadingVenta=false
+  }
+  console.log(res.data.success);
+  
+  
         }catch(e){
           this.alert=true
-          this.tex=e.toString()
-          this.typ='success'
+          this.tex="Ha ocurrido un error"
+          this.typ='error'
           this.titu='Algo salio mal'
           this.loadingVenta=false
         }
+      }
 },
 
 async listVenta(){

@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import guard from './guard'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import UsuariosView from '../views/UsuariosView.vue'
 import ProductosView from '../views/ProductosView.vue'
 import VentaView from '@/views/VentaView.vue'
-import VentaListView from '@/views/VentasListView.vue'
+import VentaDetallesView from '@/views/VentaDetallesView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {requiresAuth : true}
   },
   {
     path: '/login',
@@ -20,22 +22,26 @@ const routes = [
   {
     path: '/usuarios',
     name: 'Usuarios',
-    component: UsuariosView
+    component: UsuariosView,
+    meta: {requiresAuth : true}
   },
   {
     path: '/producto',
     name: 'Productos',
-    component: ProductosView
+    component: ProductosView,
+    meta: {requiresAuth : true}
   },
   {
     path: '/venta',
     name: 'Venta',
-    component: VentaView
+    component: VentaView,
+    meta: {requiresAuth : true}
   },
   {
     path: '/ventaList',
     name: 'VentaList',
-    component: VentaListView
+    component: VentaDetallesView,
+    meta: {requiresAuth : true}
   },
   {
     path: '/about',
@@ -52,6 +58,8 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
+
+router.beforeEach(guard);
 
 export default router

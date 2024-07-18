@@ -82,9 +82,10 @@
 
         <v-list density="compact" nav >
           <v-list-item prepend-icon="mdi-view-dashboard" title="Inicio" value="inicio" to="/"></v-list-item>
-          <v-list-item prepend-icon="mdi-clipboard-account" title="Usuarios" value="usuarios" to="/usuarios"></v-list-item>
-          <v-list-item prepend-icon="mdi-muffin" title="Productos" value="productos" to="/producto"></v-list-item>
+          <v-list-item prepend-icon="mdi-clipboard-account" title="Usuarios" value="usuarios" to="/usuarios" v-if="administrador"></v-list-item>
+          <v-list-item prepend-icon="mdi-muffin" title="Productos" value="productos" to="/producto" v-if="administrador"></v-list-item>
           <v-list-item prepend-icon="mdi-cart" title="Ventas" value="ventas" to="/venta"></v-list-item>
+          <v-list-item prepend-icon="mdi-cart" title="Listado de Ventas" value="listado" to="/ventaList" v-if="administrador"></v-list-item>
         </v-list>
       </v-navigation-drawer>
 
@@ -111,6 +112,7 @@ export default {
         fullName: 'John Doe',
         usuario: 'john.doe@doe.com',
       },
+      isAdmin:false
         }       
         
     }, 
@@ -136,6 +138,11 @@ export default {
     mounted(){
       this.getUser()
     },
+    computed:{
+      administrador(){
+          return this.usuario.isAdmin;
+      }
+    }
     
         
     
