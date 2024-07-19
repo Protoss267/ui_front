@@ -36,14 +36,14 @@
     <tbody>
       <tr
         v-for="(sold,a) in solds"
-        :key="a"
-
+        :key="sold.id"
+        
       >
         <td>{{ a+1 }}</td>
         <td>{{ sold.sold.fecha }}</td>
         <td>{{ sold.sold.transfer }}</td>
         <td>{{ sold.sold.amount }}</td>
-        <td>acciones</td>
+        <td><router-link :to="{name: 'VentaDetalle', params: {id: sold.sold.id}}">Hola</router-link></td>
       </tr>
       
       
@@ -92,6 +92,10 @@ export default {
         this.listVenta();
     },
     methods:{
+      Detalle(id){
+        this.$router.push("/ventaDetalle/" + id)
+      },
+  
 async listVenta(){
   try{
           this.loading=true

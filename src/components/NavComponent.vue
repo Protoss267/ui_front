@@ -20,7 +20,7 @@
       >
         <template v-slot:activator="{ props }">
           <v-btn
-            icon
+            
             v-bind="props"
           >
             <v-avatar
@@ -71,21 +71,43 @@
         :width="320"
         class="bg-yellow-lighten-5"
       >
-        <v-list-item
-        prepend-icon="mdi-account-circle"
-          
-        >
-        {{  }}
-      </v-list-item>
+       <h3 class="text-center">Menu de navegacion</h3>
 
         <v-divider></v-divider>
 
-        <v-list density="compact" nav >
-          <v-list-item prepend-icon="mdi-view-dashboard" title="Inicio" value="inicio" to="/"></v-list-item>
-          <v-list-item prepend-icon="mdi-clipboard-account" title="Usuarios" value="usuarios" to="/usuarios" v-if="administrador"></v-list-item>
-          <v-list-item prepend-icon="mdi-muffin" title="Productos" value="productos" to="/producto" v-if="administrador"></v-list-item>
+        <!--<v-list density="compact" nav >
+          
+          <v-list-item prepend-icon="mdi-muffin" title="Productos" value="productos" to="/producto" v-if="administrador"></v-list-item>-->
+          <v-list v-model:opened="open">
+            <v-list-item prepend-icon="mdi-home" title="Inicio" value="inicio" to="/"></v-list-item>
+          <v-list-item prepend-icon="mdi-account-circle" title="Usuarios" value="usuarios" to="/usuarios" v-if="administrador"></v-list-item>
+      <v-list-group value="Productos">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-if="administrador"
+            v-bind="props"
+            prepend-icon="mdi-muffin"
+            title="Productos"
+            value="productos"
+          ></v-list-item>
+        </template>
+         <v-list-item
+              v-bind="props"
+              prepend-icon="mdi-playlist-edit"
+              title="Listar Productos"
+              to="/producto"
+            ></v-list-item>
+            <v-list-item
+              v-bind="props"
+              prepend-icon="mdi-gauge-low"
+              title="Baja Existencia"
+              to="/bajoStock"
+            ></v-list-item>
+      </v-list-group>
+    
+          
           <v-list-item prepend-icon="mdi-cart" title="Ventas" value="ventas" to="/venta"></v-list-item>
-          <v-list-item prepend-icon="mdi-cart" title="Listado de Ventas" value="listado" to="/ventaList" v-if="administrador"></v-list-item>
+          <v-list-item prepend-icon="mdi-store" title="Listado de Ventas" value="listado" to="/ventaList" v-if="administrador"></v-list-item>
         </v-list>
       </v-navigation-drawer>
 
@@ -104,6 +126,17 @@ export default {
   components:{},
     data(){
         return {
+          open: ['Users'],
+      admins: [
+        ['Management', 'mdi-account-multiple-outline'],
+        ['Settings', 'mdi-cog-outline'],
+      ],
+      cruds: [
+        ['Create', 'mdi-plus-outline'],
+        ['Read', 'mdi-file-outline'],
+        ['Update', 'mdi-update'],
+        ['Delete', 'mdi-delete'],
+      ],
             toggle: null,
             dialog:false,
             usuario:'',

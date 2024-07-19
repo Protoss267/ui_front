@@ -48,7 +48,7 @@ export default{
           precioF,
           total
         }
-        return axios.put(ENDPOINT_PATH + 'producto/edit/' + id,productoU)
+        return axios.put(ENDPOINT_PATH + 'producto/update/' + id,productoU)
       },
       createProduct(codigo,name,priceI,priceF,stock){
         const productoC={
@@ -76,5 +76,13 @@ export default{
       },
       listSold(){
         return axios.get(ENDPOINT_PATH + 'sold/listDay')
+      },
+      getSold(id)
+      {
+        return axios.get(ENDPOINT_PATH + 'sold/'+id)
+      },
+      getLowStock()
+      {
+        return axios.get(ENDPOINT_PATH + 'product/lowStock')
       }
 }
