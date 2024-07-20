@@ -131,14 +131,7 @@ cols="4"
       </tr>
       
       
-      <tr>
-        <td colspan="2">Importe Total</td>
-        <td>{{ this.ventaT }}</td>
-      </tr>
-      <tr>
-        <td >TributoC:{{ this.coste }}</td>
-        <td>OnatG: {{ this.ganancia }}</td>
-      </tr>
+      
     </tbody>
   </v-table>
 

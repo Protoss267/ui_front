@@ -6,6 +6,8 @@ import UsuariosView from '../views/UsuariosView.vue'
 import ProductosView from '../views/ProductosView.vue'
 import VentaView from '@/views/VentaView.vue'
 import VentaDetallesView from '@/views/VentaDetallesView.vue'
+import VentaDetalle from '@/views/VentaDetalle.vue'
+import BajoStockView from '@/views/BajoStockView.vue'
 
 const routes = [
   {
@@ -41,6 +43,18 @@ const routes = [
     path: '/ventaList',
     name: 'VentaList',
     component: VentaDetallesView,
+    meta: {requiresAuth : true}
+  },
+  {
+    path: '/ventaDetalle/:id',
+    name: 'VentaDetalle',
+    component: VentaDetalle,
+    meta: {requiresAuth : true}
+  },
+  {
+    path: '/bajoStock',
+    name: 'bajoStock',
+    component: BajoStockView,
     meta: {requiresAuth : true}
   },
   {

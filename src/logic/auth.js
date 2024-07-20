@@ -40,15 +40,15 @@ export default{
       getProducts(){
         return axios.get(ENDPOINT_PATH + 'product/list')
       },
-      updateProdut(codigo,nombre,precioI,precioF,total,id){
+      updateProdut(codigo,name,priceI,priceF,stock,id){
         const productoU={
           codigo,
-          nombre,
-          precioI,
-          precioF,
-          total
+          name,
+          priceI,
+          priceF,
+          stock
         }
-        return axios.put(ENDPOINT_PATH + 'producto/edit/' + id,productoU)
+        return axios.put(ENDPOINT_PATH + 'product/update/' + id,productoU)
       },
       createProduct(codigo,name,priceI,priceF,stock){
         const productoC={
@@ -76,5 +76,16 @@ export default{
       },
       listSold(){
         return axios.get(ENDPOINT_PATH + 'sold/listDay')
+      },
+      getSold(id)
+      {
+        return axios.get(ENDPOINT_PATH + 'sold/'+id)
+      },
+      getLowStock()
+      {
+        return axios.get(ENDPOINT_PATH + 'product/lowStock')
+      },
+      getSoldsByRange(fechaI,fechaF){
+        return axios.post(ENDPOINT_PATH+'sold',{fechaI,fechaF})
       }
 }

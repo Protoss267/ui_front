@@ -129,7 +129,7 @@
                 <v-text-field
                   color="primary"
                   label="Nombre*"
-                  v-model="productEdit.nombre"
+                  v-model="productEdit.name"
                 ></v-text-field>
               </v-col>
               </v-row>
@@ -145,7 +145,7 @@
                   label="Precio de Coste*"
                   type="number"
                   required
-                  v-model="productEdit.coste"
+                  v-model="productEdit.priceI"
                 ></v-text-field>
               </v-col>
               </v-row>
@@ -160,7 +160,7 @@
                   label="Precio de venta*"
                   type="number"
                   required
-                  v-model="productEdit.precio"
+                  v-model="productEdit.priceF"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -175,7 +175,7 @@
                   label="Existencia*"
                   type="number"
                   required
-                  v-model="productEdit.existencia"
+                  v-model="productEdit.stock"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -350,10 +350,10 @@
       productEdit:{
         id:'',
         codigo:'',
-        nombre:'',
-        coste:'',
-        precio:'',
-        existencia: '',
+        name:'',
+        priceI:'',
+        priceF:'',
+        stock: '',
         
       },
       productCreate:{
@@ -407,13 +407,14 @@
   
         openEditModal(user)
         {
+          console.log(user);
         this.productEdit={
         id:user.id,
         codigo: user.codigo,
-        nombre: user.nombre,
-        coste: user.coste,
-        precio: user.precio,
-        existencia: user.existencia,
+        name: user.name,
+        priceI: user.priceI,
+        priceF: user.priceF,
+        stock: user.stock,
         
       },
          this.dialog=true;
@@ -424,8 +425,8 @@
         },
         async submitEditForm(){
           const res= await auth.updateProdut(this.productEdit.codigo,
-          this.productEdit.nombre,this.productEdit.coste,this.productEdit.precio,
-          this.productEdit.existencia,this.productEdit.id);
+          this.productEdit.name,this.productEdit.priceI,this.productEdit.priceF,
+          this.productEdit.stock,this.productEdit.id);
           console.log(res);
           this.closeEditModal()
           this.showAlert()
