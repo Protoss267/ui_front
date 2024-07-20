@@ -10,6 +10,75 @@
   <v-card class="my-5 mx-5">
     <v-card-title>Lista de Ventas Diaria</v-card-title>
     <v-divider></v-divider>
+    <v-row>
+      <v-col cols="4">
+    <v-container
+    fluid
+    class="mx-5 my-5 px-0 py-0"
+  >
+    <v-row justify="center">
+      <v-menu
+        min-width="200px"
+        rounded
+      >
+        <template v-slot:activator="{ props }">
+         <v-text-field v-bind="props" outlined label="Seleccione la fecha Inicial" v-model="dateI"></v-text-field>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center pb-2">
+              <v-date-picker
+        color="primary"
+        elevation="24"
+        :max="fechaActual"
+        v-model="dateI"
+      ></v-date-picker>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    
+    </v-row>
+  </v-container>
+</v-col>
+<v-col cols="4">
+    <v-container
+    fluid
+    class="mx-5 my-5 px-5 py-0"
+  >
+    <v-row justify="center">
+      <v-menu
+        min-width="200px"
+        rounded
+      >
+        <template v-slot:activator="{ props }">
+         <v-text-field v-bind="props" outlined label="Seleccione la fecha final" v-model="dateF"></v-text-field>
+        </template>
+        <v-card>
+          <v-card-text>
+            <div class="mx-auto text-center pb-2">
+              <v-date-picker
+        color="primary"
+        elevation="24"
+        :max="fechaActual"
+        v-model="dateF"
+      ></v-date-picker>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+      
+    </v-row>
+  </v-container>
+</v-col>
+<v-col cols="4">
+<v-btn prepend-icon="mdi-search" class="mx-5 my-5 px-5 py-0" color="primary" @click="listVenta">
+  Mostrar
+</v-btn>
+
+</v-col>
+</v-row>
+
     <v-card-text >
       <v-table density="compact">
     <thead>
@@ -73,7 +142,11 @@ export default {
     data(){
         return{
          
-            
+            dateI:null,
+            dateF:null,
+            fechaFFormateada:'',
+            fechaIFormateada:'',
+            fechaActual: this.obtenerFechaActual(),
             ventaT:0,
             coste:0,
             ganancia:0,
@@ -83,23 +156,31 @@ export default {
     },
     components:{NavComponentVue},
     computed:{
-      
+     
     },
 
     
     
     mounted(){
-        this.listVenta();
+        
     },
     methods:{
       Detalle(id){
         this.$router.push("/ventaDetalle/" + id)
       },
+
+      obtenerFechaActual(){
+        const hoy = new Date();
+        const year = hoy.getFullYear();
+        const mes = ('0'+ (hoy.getMonth()+1)).slice(-2);
+        const dia = ('0'+ hoy.getDate()).slice(-2);
+        return year+'-'+mes+'-'+dia;
+      },
   
 async listVenta(){
   try{
           this.loading=true
-            const res = await auth.listSold();
+            const res = await auth.getSoldsByRange(this.dateI,this.dateF);
             if(res.data)
             {console.log(res.data.data);
             this.loading=false

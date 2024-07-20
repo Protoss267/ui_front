@@ -84,5 +84,8 @@ export default{
       getLowStock()
       {
         return axios.get(ENDPOINT_PATH + 'product/lowStock')
+      },
+      getSoldsByRange(fechaI,fechaF){
+        return axios.post(ENDPOINT_PATH+'sold',{fechaI,fechaF})
       }
 }

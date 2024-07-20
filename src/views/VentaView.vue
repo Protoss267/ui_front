@@ -99,51 +99,7 @@ cols="4"
   <alert v-model="alert" :tex="tex" :titu="titu" :typ="typ"></alert>
 
 
-  <v-card>
-    <v-card-title>Lista de Ventas Diaria</v-card-title>
-    <v-divider></v-divider>
-    <v-card-text >
-      <v-table density="compact">
-    <thead>
-      <tr>
-        <th class="text-left">
-          No
-        </th>
-      
-        <th class="text-left">
-          Transferencia
-        </th>
-        <th class="text-left">
-          Saldo Final
-        </th>
-        
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="(sold,a) in solds"
-        :key="a"
-
-      >
-        <td>{{ a+1 }}</td>
-        <td>{{ sold.sold.transfer }}</td>
-        <td>{{ sold.sold.amount }}</td>
-      </tr>
-      
-      
-      <tr>
-        <td colspan="2">Importe Total</td>
-        <td>{{ this.ventaT }}</td>
-      </tr>
-      <tr>
-        <td >TributoC:{{ this.coste }}</td>
-        <td>OnatG: {{ this.ganancia }}</td>
-      </tr>
-    </tbody>
-  </v-table>
-
-    </v-card-text>
-  </v-card>
+ 
   
   </div>
 </template>
