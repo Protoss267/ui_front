@@ -72,7 +72,7 @@
   </v-container>
 </v-col>
 <v-col cols="4">
-<v-btn prepend-icon="mdi-search" class="mx-5 my-5 px-5 py-0" color="primary" @click="listVenta">
+<v-btn prepend-icon="mdi-magnify" class="mx-5 my-5 px-5 py-0" color="primary" @click="listVenta">
   Mostrar
 </v-btn>
 
@@ -112,7 +112,7 @@
         <td>{{ sold.sold.fecha }}</td>
         <td>{{ sold.sold.transfer }}</td>
         <td>{{ sold.sold.amount }}</td>
-        <td><router-link :to="{name: 'VentaDetalle', params: {id: sold.sold.id}}">Hola</router-link></td>
+        <td><router-link :to="{name: 'VentaDetalle', params: {id: sold.sold.id}}"><v-icon small>mdi-eye-outline</v-icon></router-link></td>
       </tr>
       
       
@@ -121,14 +121,15 @@
         <td>{{ this.ventaT }}</td>
       </tr>
       <tr>
-        <td >C:{{ this.coste }}</td>
-        <td>G: {{ this.ganancia }}</td>
+        <td >Costo:{{ this.coste }}</td>
+        <td>Ganancia: {{ this.ganancia }}</td>
       </tr>
     </tbody>
   </v-table>
 
     </v-card-text>
   </v-card>
+  <alert v-model="alert" :tex="tex" :titu="titu" :typ="typ"></alert>
   
   </div>
 </template>
@@ -136,6 +137,7 @@
 <script>
 import NavComponentVue from '@/components/NavComponent.vue'
 import auth from '@/logic/auth';
+import Alert from '@/components/AlertComponent.vue';
 
 
 export default {
@@ -151,10 +153,14 @@ export default {
             coste:0,
             ganancia:0,
             stock:0,
+            alert:false,
+            tex:'',
+            typ:'',
+            titu:'',
             
         }
     },
-    components:{NavComponentVue},
+    components:{NavComponentVue,Alert},
     computed:{
      
     },
@@ -178,6 +184,14 @@ export default {
       },
   
 async listVenta(){
+  if(this.dateI==null || this.dateF==null){
+    this.alert=true
+          this.tex='Los campos no pueden estar vacios'
+          this.typ='error'
+          this.titu='Algo salio mal'
+          
+  }
+  else{
   try{
           this.loading=true
             const res = await auth.getSoldsByRange(this.dateI,this.dateF);
@@ -196,6 +210,7 @@ async listVenta(){
         {
             console.log('Algo salio mal');
         }
+      }
       },
 }
 }

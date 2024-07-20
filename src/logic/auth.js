@@ -40,15 +40,15 @@ export default{
       getProducts(){
         return axios.get(ENDPOINT_PATH + 'product/list')
       },
-      updateProdut(codigo,nombre,precioI,precioF,total,id){
+      updateProdut(codigo,name,priceI,priceF,stock,id){
         const productoU={
           codigo,
-          nombre,
-          precioI,
-          precioF,
-          total
+          name,
+          priceI,
+          priceF,
+          stock
         }
-        return axios.put(ENDPOINT_PATH + 'producto/update/' + id,productoU)
+        return axios.put(ENDPOINT_PATH + 'product/update/' + id,productoU)
       },
       createProduct(codigo,name,priceI,priceF,stock){
         const productoC={
