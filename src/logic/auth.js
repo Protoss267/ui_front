@@ -87,5 +87,15 @@ export default{
       },
       getSoldsByRange(fechaI,fechaF){
         return axios.post(ENDPOINT_PATH+'sold',{fechaI,fechaF})
+      },
+
+      //DASHBOARD
+      getSoldsByWeek()
+      {
+        return axios.get(ENDPOINT_PATH + 'dash/week')
+      },
+      obtenerGanaciasMensuales()
+      {
+        return axios.get(ENDPOINT_PATH + 'dash/gananciamensual')
       }
 }
