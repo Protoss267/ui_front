@@ -17,8 +17,8 @@
           
           <v-row>
             
-            <v-col cols="6"><BarChart /></v-col>
-            <v-col cols="6"><linea/></v-col>
+            <v-col cols="12"><salesChart></salesChart></v-col>
+            <v-col cols="12"><PieChartGraf></PieChartGraf></v-col>
           
           </v-row>
         </div>
@@ -33,15 +33,16 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import NavComponent from '@/components/NavComponent.vue';
-import BarChart from '../components/VentasSemanalesGraf.vue';
-import linea from '../components/GananciasMensualesGraf.vue';
+import salesChart from '@/components/DashBoard/VentasPorFechaGraf.vue'
+import PieChartGraf from '@/components/DashBoard/PieChartGraf.vue';
+
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     NavComponent,
-    linea,
-    BarChart,
+    salesChart,
+    PieChartGraf
   },
   setup() {
     // Estado para manejar la vista activa

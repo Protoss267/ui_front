@@ -90,12 +90,19 @@ export default{
       },
 
       //DASHBOARD
-      getSoldsByWeek()
-      {
-        return axios.get(ENDPOINT_PATH + 'dash/week')
+      obtenerVentasPorFecha() {
+        return axios.get(ENDPOINT_PATH+'dash/ventasPorFecha');
       },
-      obtenerGanaciasMensuales()
+      obtenerVentasPorSemana() {
+        return axios.get(ENDPOINT_PATH+'dash/ventasPorSemanaAnoo');
+      },
+      obtenerVentasPorMes() {
+        return axios.get(ENDPOINT_PATH+'dash/ventasPorMesAnno');
+      },
+      obtenerProductosVendidosPorRango(mes,anno)
       {
-        return axios.get(ENDPOINT_PATH + 'dash/gananciamensual')
+        return axios.get(ENDPOINT_PATH+'dash/productoMensual',{
+          params: { mes: mes, anno: anno }
+        });
       }
 }
