@@ -90,8 +90,8 @@ export default{
       },
 
       //DASHBOARD
-      obtenerVentasPorFecha() {
-        return axios.get(ENDPOINT_PATH+'dash/ventasPorFecha');
+      obtenerVentasPorFecha(service) {
+        return axios.get(ENDPOINT_PATH + service);
       },
       obtenerVentasPorSemana() {
         return axios.get(ENDPOINT_PATH+'dash/ventasPorSemanaAnoo');
@@ -104,5 +104,23 @@ export default{
         return axios.get(ENDPOINT_PATH+'dash/productoMensual',{
           params: { mes: mes, anno: anno }
         });
-      }
+      },
+      obtenerTotalIngresos() {
+        return axios.get(ENDPOINT_PATH+'dash/ingresos');
+      },
+      obtenerTotalCosto() {
+        return axios.get(ENDPOINT_PATH+'dash/coste');
+      },
+      obtenerGananciaNeta() {
+        return axios.get(ENDPOINT_PATH+'dash/gananciaNeta');
+      },
+      obtenerGananciaNetaPorDia(servicio) {
+        return axios.get(ENDPOINT_PATH + servicio);
+      },
+      // obtenerGananciaNetaPorSemana() {
+      //   return axios.get(ENDPOINT_PATH+'dash/gananciaNetaDiaSemana');
+      // },
+      // obtenerGananciaNetaPorMes() {
+      //   return axios.get(ENDPOINT_PATH+'dash/gananciaNetaDiaMes');
+      // },
 }

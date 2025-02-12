@@ -4,8 +4,8 @@
     <!-- Barra de navegación en la parte superior -->
     <header class="navbar">
       <ul>
-        <li @click="setView('barChart')">Gráfico de Ventas</li>
-        <li @click="setView('otherView')">Otra Vista</li>
+        <li @click="setView('Ventas')">Monitoreo de ventas</li>
+        <li @click="setView('Ganancia')">Ingresos y Gastos</li>
       </ul>
     </header>
 
@@ -13,7 +13,7 @@
     <div class="main-container">
       <!-- Contenido principal -->
       <section class="content">
-        <div v-if="activeView === 'barChart'">
+        <div v-if="activeView === 'Ventas'">
           
           <v-row>
             
@@ -22,8 +22,9 @@
           
           </v-row>
         </div>
-        <div v-if="activeView === 'otherView'">
-          <p>Aquí puedes mostrar otro componente.</p>
+        <div v-if="activeView === 'Ganancia'">
+          <ResumenFinanciero></ResumenFinanciero>
+          <GananciasNetasGraf></GananciasNetasGraf>
         </div>
       </section>
     </div>
@@ -35,6 +36,8 @@ import { defineComponent, ref } from 'vue';
 import NavComponent from '@/components/NavComponent.vue';
 import salesChart from '@/components/DashBoard/VentasPorFechaGraf.vue'
 import PieChartGraf from '@/components/DashBoard/PieChartGraf.vue';
+import ResumenFinanciero from '@/components/DashBoard/ResumenFinanciero.vue';
+import GananciasNetasGraf from '@/components/DashBoard/GananciasNetasGraf.vue';
 
 
 export default defineComponent({
@@ -42,11 +45,13 @@ export default defineComponent({
   components: {
     NavComponent,
     salesChart,
-    PieChartGraf
+    PieChartGraf,
+    ResumenFinanciero,
+    GananciasNetasGraf
   },
   setup() {
     // Estado para manejar la vista activa
-    const activeView = ref('barChart'); // Vista predeterminada es BarChart
+    const activeView = ref('Ventas'); // Vista predeterminada es BarChart
 
     // Método para cambiar la vista activa
     const setView = (view) => {
