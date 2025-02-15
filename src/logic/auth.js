@@ -117,9 +117,9 @@ export default{
       obtenerGananciaNetaPorDia(servicio) {
         return axios.get(ENDPOINT_PATH + servicio);
       },
-      // obtenerGananciaNetaPorSemana() {
-      //   return axios.get(ENDPOINT_PATH+'dash/gananciaNetaDiaSemana');
-      // },
+      obtenerProductoBajos(umbral) {
+        return axios.get(ENDPOINT_PATH+'dash/bajaExistencia/'+ umbral);
+      },
       // obtenerGananciaNetaPorMes() {
       //   return axios.get(ENDPOINT_PATH+'dash/gananciaNetaDiaMes');
       // },

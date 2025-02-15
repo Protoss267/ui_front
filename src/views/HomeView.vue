@@ -6,6 +6,7 @@
       <ul>
         <li @click="setView('Ventas')">Monitoreo de ventas</li>
         <li @click="setView('Ganancia')">Ingresos y Gastos</li>
+        <li @click="setView('Productos')">Productos</li>
       </ul>
     </header>
 
@@ -25,7 +26,11 @@
         <div v-if="activeView === 'Ganancia'">
           <ResumenFinanciero></ResumenFinanciero>
           <GananciasNetasGraf></GananciasNetasGraf>
+          <ProductoBajoGraf></ProductoBajoGraf>
         </div>
+        <div v-if="activeView === 'Productos'">
+          <ProductoBajoGraf></ProductoBajoGraf>
+        </div>        
       </section>
     </div>
   </div>
@@ -38,6 +43,8 @@ import salesChart from '@/components/DashBoard/VentasPorFechaGraf.vue'
 import PieChartGraf from '@/components/DashBoard/PieChartGraf.vue';
 import ResumenFinanciero from '@/components/DashBoard/ResumenFinanciero.vue';
 import GananciasNetasGraf from '@/components/DashBoard/GananciasNetasGraf.vue';
+import ProductoBajoGraf from '@/components/DashBoard/ProductoBajoGraf.vue';
+
 
 
 export default defineComponent({
@@ -47,7 +54,8 @@ export default defineComponent({
     salesChart,
     PieChartGraf,
     ResumenFinanciero,
-    GananciasNetasGraf
+    GananciasNetasGraf,
+    ProductoBajoGraf
   },
   setup() {
     // Estado para manejar la vista activa

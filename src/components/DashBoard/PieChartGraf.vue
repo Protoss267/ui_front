@@ -1,16 +1,49 @@
 <template>
-  <div>
-    <input v-model="month" type="number" placeholder="Mes" />
-    <input v-model="year" type="number" placeholder="Año" />
-    <button @click="fetchData">Obtener datos</button>
-    
-    <canvas id="myChart" width="400" height="200"></canvas>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="12">
+        <h2 class="text-center font-weight-bold">📊 Productos Vendidos por Mes</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <v-select
+          v-model="month"
+          :items="months"
+          item-title="text"
+          item-value="value"
+          label="Mes"
+          outlined
+          dense
+          rounded
+        ></v-select>
+      </v-col>
+      <v-col cols="6">
+        <v-select
+          v-model="year"
+          :items="years"
+          item-title="text"
+          item-value="value"
+          label="Año"
+          outlined
+          dense
+          rounded
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-btn @click="fetchData" color="primary">Obtener datos</v-btn>
+    <v-sheet class="mt-4 chart-container" v-if="chartReady">
+      <canvas id="myChart"></canvas>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script>
 import auth from '@/logic/auth';
 import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+Chart.register(zoomPlugin);
 
 export default {
   data() {
@@ -18,68 +51,109 @@ export default {
       month: '',
       year: '',
       chart: null,
+      chartReady: false,
+      months: [
+        { text: 'Enero', value: 1 },
+        { text: 'Febrero', value: 2 },
+        { text: 'Marzo', value: 3 },
+        { text: 'Abril', value: 4 },
+        { text: 'Mayo', value: 5 },
+        { text: 'Junio', value: 6 },
+        { text: 'Julio', value: 7 },
+        { text: 'Agosto', value: 8 },
+        { text: 'Septiembre', value: 9 },
+        { text: 'Octubre', value: 10 },
+        { text: 'Noviembre', value: 11 },
+        { text: 'Diciembre', value: 12 }
+      ],
+      years: Array.from({ length: 10 }, (_, i) => {
+        const year = new Date().getFullYear() - i;
+        return { text: year.toString(), value: year };
+      }),
     };
   },
   methods: {
-    // Función que hace la petición al backend
     async fetchData() {
-      try {
-        // Obtén los datos del backend
-        const response = await auth.obtenerProductosVendidosPorRango(this.month, this.year);
-
-        // Actualiza el gráfico con los datos obtenidos
-        this.updateChart(response.data);
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
+      if(this.month =='' || this.year=='') {
+        alert('No pueden haber campos vacíos');
+      } else {
+        try {
+          const response = await auth.obtenerProductosVendidosPorRango(this.month, this.year);
+          this.chartReady = false;
+          await this.$nextTick();
+          this.chartReady = true;
+          await this.$nextTick();
+          this.updateChart(response.data);
+        } catch (error) {
+          console.error('Error al obtener los datos:', error);
+        }
       }
     },
 
-    // Método para realizar la petición al backend
-   
-    // Actualiza el gráfico con los datos recibidos
     updateChart(data) {
-      // Si ya hay un gráfico, destrúyelo antes de crear uno nuevo
       if (this.chart) {
         this.chart.destroy();
       }
 
-      const ctx = document.getElementById('myChart').getContext('2d');
-      
-      // Extrae los productos y las cantidades vendidas de los datos
+      const canvas = document.getElementById('myChart');
+      if(!canvas) {
+        console.log("No se encontró el canvas");
+      }
+      const ctx = canvas.getContext('2d');
       const productos = data.data.map(item => item.producto);
       const cantidades = data.data.map(item => item.cantidad_vendida);
 
-      // Crea el gráfico con los datos recibidos
       this.chart = new Chart(ctx, {
-        type: 'bar',  // Puedes cambiar el tipo de gráfico (por ejemplo, 'line' para un gráfico de líneas)
+        type: 'bar',
         data: {
-          labels: productos,  // Los productos como etiquetas en el eje X
+          labels: productos,
           datasets: [
             {
-              label: 'Cantidad Vendida',  // Nombre de la serie de datos
-              data: cantidades,  // Las cantidades vendidas
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',  // Color de las barras
-              borderColor: 'rgba(75, 192, 192, 1)',  // Color de los bordes de las barras
-              borderWidth: 1,
+              label: 'Cantidad Vendida',
+              data: cantidades,
+              backgroundColor: 'rgba(75, 192, 192, 0.5)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
             },
           ],
         },
         options: {
+          indexAxis: 'y',
           responsive: true,
-          scales: {
-            x: {
-              beginAtZero: true,  // Empieza el eje X en 0
-              title: {
-                display: true,
-                text: 'Productos',
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+            zoom: {
+              pan: {
+                enabled: true,
+                mode: 'y',
+              },
+              zoom: {
+                wheel: {
+                  enabled: true,
+                },
+                pinch: {
+                  enabled: true,
+                },
+                mode: 'y',
               },
             },
-            y: {
-              beginAtZero: true,  // Empieza el eje Y en 0
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
               title: {
                 display: true,
                 text: 'Cantidad Vendida',
               },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Productos',
+              }
             },
           },
         },
@@ -88,3 +162,24 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chart-container {
+  width: 100%;
+  height: 500px;
+  overflow-x: auto;
+  position: relative;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.text-center {
+  text-align: center;
+}
+.font-weight-bold {
+  font-weight: bold;
+}
+</style>
