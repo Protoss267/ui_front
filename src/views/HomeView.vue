@@ -59,7 +59,7 @@ export default defineComponent({
   },
   setup() {
     // Estado para manejar la vista activa
-    const activeView = ref('Ventas'); // Vista predeterminada es BarChart
+    const activeView = ref('Ganancia'); // Vista predeterminada es BarChart
 
     // Método para cambiar la vista activa
     const setView = (view) => {

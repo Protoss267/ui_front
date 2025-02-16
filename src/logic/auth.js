@@ -120,7 +120,10 @@ export default{
       obtenerProductoBajos(umbral) {
         return axios.get(ENDPOINT_PATH+'dash/bajaExistencia/'+ umbral);
       },
-      // obtenerGananciaNetaPorMes() {
-      //   return axios.get(ENDPOINT_PATH+'dash/gananciaNetaDiaMes');
-      // },
+      obtenerMargenDeGanacia() {
+        return axios.get(ENDPOINT_PATH+'dash/margenGanancia');
+      },
+      obtenerCrecimientoVentas() {
+        return axios.get(ENDPOINT_PATH+'dash/creciminetoVentas');
+      },
 }
