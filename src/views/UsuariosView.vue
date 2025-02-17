@@ -81,242 +81,105 @@
 
 <!--Aqui Empieza el modal-->
 <div class="pa-4 text-center">
-
-    <v-dialog
-      v-model="dialog"
-      max-width="600"
-      transition="dialog-top-transition"
-     >
-    
-<div class="container ">
-      <v-card
-        prepend-icon="mdi-account"
-        title="Perfil de Usuario"
-        class="bg-yellow-lighten-5"
-      >
-        <v-card-text>
+  <v-dialog v-model="dialog" max-width="500px" transition="dialog-top-transition">
+    <div class="container">
+      <v-card prepend-icon="mdi-account" title="Perfil de Usuario" class="bg-yellow-lighten-5" style="max-height: 90vh; display: flex; flex-direction: column;">
+        <v-card-text style="overflow-y: auto;">
           <v-row dense>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-              
-            >
-              <v-text-field
-               color="primary"
-                label="Nombre*"
-                required
-                v-model="userEdit.name"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-              
-            >
-              <v-text-field
-                color="primary"
-                hint="El nombre de usuario es unico"
-                label="Usuario*"
-                v-model="userEdit.usuario"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-            >
-              <v-text-field
-                color="primary" 
-                label="Contraseña*"
-                type="password"
-                required
-                v-model="userEdit.pass"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-            >
-              <v-text-field
-                color="primary"
-                label="Confirmar Contraseña*"
-                type="password"
-                required
-                v-model="userEdit.pass1"
-              ></v-text-field>
+            <v-col cols="12">
+              <v-text-field color="primary" label="Nombre*" required v-model="userEdit.name"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col
-            cols="12"
-            md="12"
-            sm="6"
-            >
-            <v-checkbox
-      v-model="userEdit.isAdmin"
-      label="Administrador?"
-      color="primary"
-    ></v-checkbox>
+            <v-col cols="12">
+              <v-text-field color="primary" hint="El nombre de usuario es único" label="Usuario*" v-model="userEdit.usuario"></v-text-field>
             </v-col>
           </v-row>
-
-          <small class="text-caption text-medium-emphasis " ><span class="text-red">*indica que los campos son requeridos</span></small>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field color="primary" label="Contraseña*" type="password" required v-model="userEdit.pass"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field color="primary" label="Confirmar Contraseña*" type="password" required v-model="userEdit.pass1"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-checkbox v-model="userEdit.isAdmin" label="Administrador?" color="primary"></v-checkbox>
+            </v-col>
+          </v-row>
+          <small class="text-caption text-medium-emphasis">
+            <span class="text-red">* indica que los campos son requeridos</span>
+          </small>
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-
-          <v-btn
-            text="Cerrar"
-            variant="plain"
-            color="danger"
-            @click="closeEditModal()"
-          ></v-btn>
-
-          <v-btn
-            color="primary"
-            text="Guardar"
-            variant="tonal"
-            @click="submitEditForm"
-          ></v-btn>
+          <v-btn text="Cerrar" variant="plain" color="danger" @click="closeEditModal()"></v-btn>
+          <v-btn color="primary" text="Guardar" variant="tonal" @click="submitEditForm"></v-btn>
         </v-card-actions>
       </v-card>
     </div>
-    </v-dialog><!--Aqui termina el modal-->
+  </v-dialog>
+</div><!--Aqui termina el modal-->
 
     <!--Aqui Empieza el modal-->
-<div class="pa-4 text-center">
-    <v-dialog
-      v-model="create"
-      max-width="600"
-      transition="dialog-top-transition"
-     >
-    
-<div class="container ">
-      <v-card
-        prepend-icon="mdi-account"
-        title="Crear Usuario"
-        class="bg-yellow-lighten-5"
-      >
-        <v-card-text>
+    <div class="pa-4 text-center">
+  <v-dialog v-model="create" max-width="500px" transition="dialog-top-transition">
+    <div class="container">
+      <v-card prepend-icon="mdi-account" title="Crear Usuario" class="bg-yellow-lighten-5" style="max-height: 90vh; display: flex; flex-direction: column;">
+        <v-card-text style="overflow-y: auto;">
           <v-row dense>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-              
-            >
-              <v-text-field
-               color="primary"
-                label="Nombre*"
-                required
-                v-model="userCreate.name"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-              
-            >
-              <v-text-field
-                color="primary"
-                hint="El nombre de usuario es unico"
-                label="Usuario*"
-                v-model="userCreate.usuario"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-            >
-              <v-text-field
-                color="primary" 
-                label="Contraseña*"
-                type="password"
-                required
-                v-model="userCreate.pass"
-              ></v-text-field>
-            </v-col>
-            </v-row>
-            <v-row>
-            <v-col
-              cols="12"
-              md="12"
-              sm="6"
-            >
-              <v-text-field
-                color="primary"
-                label="Confirmar Contraseña*"
-                type="password"
-                required
-                v-model="userCreate.pass1"
-              ></v-text-field>
+            <v-col cols="12" md="12" sm="6">
+              <v-text-field color="primary" label="Nombre*" required v-model="userCreate.name"></v-text-field>
             </v-col>
           </v-row>
           <v-row>
-            <v-col
-            cols="12"
-            md="12"
-            sm="6"
-            >
-            <v-checkbox
-      v-model="userCreate.admin"
-      label="Administrador?"
-      color="primary"
-    ></v-checkbox>
+            <v-col cols="12" md="12" sm="6">
+              <v-text-field color="primary" hint="El nombre de usuario es único" label="Usuario*" v-model="userCreate.usuario"></v-text-field>
             </v-col>
           </v-row>
-
-          <small class="text-caption text-medium-emphasis " ><span class="text-red">*indica que los campos son requeridos</span></small>
+          <v-row>
+            <v-col cols="12" md="12" sm="6">
+              <v-text-field color="primary" label="Contraseña*" type="password" required v-model="userCreate.pass"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="12" sm="6">
+              <v-text-field color="primary" label="Confirmar Contraseña*" type="password" required v-model="userCreate.pass1"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" md="12" sm="6">
+              <v-checkbox v-model="userCreate.admin" label="Administrador?" color="primary"></v-checkbox>
+            </v-col>
+          </v-row>
+          <small class="text-caption text-medium-emphasis">
+            <span class="text-red">* indica que los campos son requeridos</span>
+          </small>
         </v-card-text>
 
         <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-
-          <v-btn
-            text="Cerrar"
-            variant="plain"
-            color="danger"
-            @click="closeCreatedModal()"
-          ></v-btn>
-
-          <v-btn
-            color="primary"
-            text="Crear"
-            variant="tonal"
-            @click="submitCreateForm()"
-          ></v-btn>
+          <v-btn text="Cerrar" variant="plain" color="danger" @click="closeCreatedModal()"></v-btn>
+          <v-btn color="primary" text="Crear" variant="tonal" @click="submitCreateForm()"></v-btn>
         </v-card-actions>
       </v-card>
     </div>
-    </v-dialog><!--Aqui termina el modal--> 
+  </v-dialog>
+</div><!--Aqui termina el modal--> 
 <modal @delete="deleteUser" :user="usuarioDele" ref="Modal"></modal>
 <alert v-model="changes" :tex="tex" :titu="titu" :typ="typ"></alert>
 
   </div>  
-</div>
-</div>
+
+
 </template>
 
 <script>
@@ -404,6 +267,14 @@ export default {
        this.create=true;
       },
       async submitEditForm(){
+        if(this.userEdit.pass != this.userEdit.pass1)
+        {
+          this.showAlert()
+        this.tex='Las Contrasennas no coinciden'
+        this.titu='Contrasenna Incorrecta'
+        this.typ='error'
+        }
+        else{
         const res= await auth.updateUser(this.userEdit.usuario,
         this.userEdit.name,this.userEdit.pass,this.userEdit.isAdmin,this.userEdit.id);
         console.log(res);
@@ -413,9 +284,25 @@ export default {
         this.titu='Usuario modificado'
         this.typ='success'
         this.getUsers()
-        
+      }
       },
       async submitCreateForm(){
+        if(this.userCreate.usuario=='' || this.userCreate.name=='' || this.userCreate.pass=='' || 
+        this.userCreate.pass1=='')
+        {
+          this.showAlert()
+        this.tex='No puede haber campos vacios'
+        this.titu='Campos Vacios'
+        this.typ='error'
+        }
+        else if(this.userCreate.pass != this.userCreate.pass1)
+        {
+          this.showAlert()
+        this.tex='Las Contrasennas deben coincidir'
+        this.titu='Contrasenna Incorrecta'
+        this.typ='error'
+        }
+        else{
         const res= await auth.createUser(this.userCreate.usuario,
         this.userCreate.name,this.userCreate.pass,this.userCreate.admin);
         console.log(res);
@@ -425,7 +312,7 @@ export default {
         this.titu='Usuario Creado'
         this.typ='success'
         this.getUsers()
-        
+      }
       },
       closeEditModal()
       {

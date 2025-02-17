@@ -90,12 +90,40 @@ export default{
       },
 
       //DASHBOARD
-      getSoldsByWeek()
-      {
-        return axios.get(ENDPOINT_PATH + 'dash/week')
+      obtenerVentasPorFecha(service) {
+        return axios.get(ENDPOINT_PATH + service);
       },
-      obtenerGanaciasMensuales()
+      obtenerVentasPorSemana() {
+        return axios.get(ENDPOINT_PATH+'dash/ventasPorSemanaAnoo');
+      },
+      obtenerVentasPorMes() {
+        return axios.get(ENDPOINT_PATH+'dash/ventasPorMesAnno');
+      },
+      obtenerProductosVendidosPorRango(mes,anno)
       {
-        return axios.get(ENDPOINT_PATH + 'dash/gananciamensual')
-      }
+        return axios.get(ENDPOINT_PATH+'dash/productoMensual',{
+          params: { mes: mes, anno: anno }
+        });
+      },
+      obtenerTotalIngresos() {
+        return axios.get(ENDPOINT_PATH+'dash/ingresos');
+      },
+      obtenerTotalCosto() {
+        return axios.get(ENDPOINT_PATH+'dash/coste');
+      },
+      obtenerGananciaNeta() {
+        return axios.get(ENDPOINT_PATH+'dash/gananciaNeta');
+      },
+      obtenerGananciaNetaPorDia(servicio) {
+        return axios.get(ENDPOINT_PATH + servicio);
+      },
+      obtenerProductoBajos(umbral) {
+        return axios.get(ENDPOINT_PATH+'dash/bajaExistencia/'+ umbral);
+      },
+      obtenerMargenDeGanacia() {
+        return axios.get(ENDPOINT_PATH+'dash/margenGanancia');
+      },
+      obtenerCrecimientoVentas() {
+        return axios.get(ENDPOINT_PATH+'dash/creciminetoVentas');
+      },
 }

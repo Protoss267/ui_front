@@ -4,8 +4,9 @@
     <!-- Barra de navegación en la parte superior -->
     <header class="navbar">
       <ul>
-        <li @click="setView('barChart')">Gráfico de Ventas</li>
-        <li @click="setView('otherView')">Otra Vista</li>
+        <li @click="setView('Ventas')">Monitoreo de ventas</li>
+        <li @click="setView('Ganancia')">Ingresos y Gastos</li>
+        <li @click="setView('Productos')">Productos</li>
       </ul>
     </header>
 
@@ -13,18 +14,23 @@
     <div class="main-container">
       <!-- Contenido principal -->
       <section class="content">
-        <div v-if="activeView === 'barChart'">
+        <div v-if="activeView === 'Ventas'">
           
           <v-row>
             
-            <v-col cols="6"><BarChart /></v-col>
-            <v-col cols="6"><linea/></v-col>
+            <v-col cols="12"><salesChart></salesChart></v-col>
+            <v-col cols="12"><PieChartGraf></PieChartGraf></v-col>
           
           </v-row>
         </div>
-        <div v-if="activeView === 'otherView'">
-          <p>Aquí puedes mostrar otro componente.</p>
+        <div v-if="activeView === 'Ganancia'">
+          <ResumenFinanciero></ResumenFinanciero>
+          <GananciasNetasGraf></GananciasNetasGraf>
+          <ProductoBajoGraf></ProductoBajoGraf>
         </div>
+        <div v-if="activeView === 'Productos'">
+          <ProductoBajoGraf></ProductoBajoGraf>
+        </div>        
       </section>
     </div>
   </div>
@@ -33,19 +39,27 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import NavComponent from '@/components/NavComponent.vue';
-import BarChart from '../components/VentasSemanalesGraf.vue';
-import linea from '../components/GananciasMensualesGraf.vue';
+import salesChart from '@/components/DashBoard/VentasPorFechaGraf.vue'
+import PieChartGraf from '@/components/DashBoard/PieChartGraf.vue';
+import ResumenFinanciero from '@/components/DashBoard/ResumenFinanciero.vue';
+import GananciasNetasGraf from '@/components/DashBoard/GananciasNetasGraf.vue';
+import ProductoBajoGraf from '@/components/DashBoard/ProductoBajoGraf.vue';
+
+
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     NavComponent,
-    linea,
-    BarChart,
+    salesChart,
+    PieChartGraf,
+    ResumenFinanciero,
+    GananciasNetasGraf,
+    ProductoBajoGraf
   },
   setup() {
     // Estado para manejar la vista activa
-    const activeView = ref('barChart'); // Vista predeterminada es BarChart
+    const activeView = ref('Ganancia'); // Vista predeterminada es BarChart
 
     // Método para cambiar la vista activa
     const setView = (view) => {
