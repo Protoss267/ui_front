@@ -1,6 +1,6 @@
 <template>
   <NavComponent />
-  <div id="dashboard">
+  <div id="dashboard" v-if="hasPermission ">
     <!-- Barra de navegación en la parte superior -->
     <header class="navbar">
       <ul>
@@ -37,18 +37,21 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import NavComponent from '@/components/NavComponent.vue';
 import salesChart from '@/components/DashBoard/VentasPorFechaGraf.vue'
 import PieChartGraf from '@/components/DashBoard/PieChartGraf.vue';
 import ResumenFinanciero from '@/components/DashBoard/ResumenFinanciero.vue';
 import GananciasNetasGraf from '@/components/DashBoard/GananciasNetasGraf.vue';
 import ProductoBajoGraf from '@/components/DashBoard/ProductoBajoGraf.vue';
+import { checkPermission } from '@/logic/admin.js'
+
 
 
 
 export default defineComponent({
   name: 'HomeView',
+   usuario: null,
   components: {
     NavComponent,
     salesChart,
@@ -64,14 +67,24 @@ export default defineComponent({
     // Método para cambiar la vista activa
     const setView = (view) => {
       activeView.value = view;
-    };
-
+    };      
+    
+    const hasPermission = ref(false);
+    console.log(hasPermission);
+    
+    onMounted(async () => {
+      hasPermission.value = await checkPermission();
+      console.log("tienes permisos???", hasPermission.value);
+      
+    })
     return {
       activeView,
-      setView
+      setView,
+      hasPermission
     };
   }
 });
+
 </script>
 
 <style scoped>

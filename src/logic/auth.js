@@ -89,6 +89,8 @@ export default{
         return axios.post(ENDPOINT_PATH+'sold',{fechaI,fechaF})
       },
 
+      
+
       //DASHBOARD
       obtenerVentasPorFecha(service) {
         return axios.get(ENDPOINT_PATH + service);
