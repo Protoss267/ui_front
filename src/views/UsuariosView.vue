@@ -1,185 +1,99 @@
-<template >
-  <div class="bg-yellow-lighten-4 h-screen mx-0">
-<v-row>
-  <v-col>
-    <NavComponentVue></NavComponentVue>
-  </v-col>
-</v-row>
-<router-view/>
+<template>
+  <div class="users-container">
+    <NavComponentVue />
 
-<div class="text-center">
-  <carga v-if="loading" ></carga>
-</div>
+    <div class="content-wrapper">
+      <div class="text-center">
+        <carga v-if="loading"></carga>
+      </div>
 
-<v-card class="mx-3 my-3" border>
-      
-
-
-<v-table class="text-center">
-  
-    <thead class="bg-primary">
-    <tr><th colspan="7" class="text-center text-h6 mb-1">Listado de Usuarios</th></tr>
-    <tr>
-        <th class="text-center">
-          No.
-        </th>
-        <th class="text-center">
-          Nombre
-        </th>
-         <th class="text-center">
-          Usuario
-        </th>
-        <th class="text-center">
-          Administrador
-        </th>
-        <th class="text-center">
-          Creado
-        </th>
-        <th class="text-center">
-          Modificado
-        </th>
-        <th class="text-center">
-          Acciones
-        </th>
-      </tr>  
-    </thead>
-  
-    <tbody class="bg-indigo-lighten-5">
-      <tr
-        v-for="(item,a) in list"
-        :key="a"
-      >
-        <td class="text-center">{{ a+1 }}</td>
-        <td class="text-center">{{ item.name }}</td>
-        <td class="text-center">{{ item.username }}</td>
-        <td class="text-center">{{ item.isAdmin }}</td>
-        <td class="text-center">{{ item.created.date }}</td>
-        <td class="text-center">{{ item.updated.date }}</td>
-        <td class="text-center">
-          <button @click="openEditModal(item)" class="mr-3"><v-icon small>mdi-pencil</v-icon></button>
-        
-            <button @click="openDialog(item)"><v-icon small>mdi-delete</v-icon></button>
-        </td>
-      </tr>
-    </tbody>
-    
-  </v-table>
-  <v-btn
-          class="mb-8 bg-blue-darken-4"
-          color="white"
-          variant="tonal"
-          block
-          @click="openCreateModal"
-          prepend-icon="mdi-plus"
-        >
-       
-          Crear Usuario
-        </v-btn>
-</v-card>
-
-
-
-<!--Aqui Empieza el modal-->
-<div class="pa-4 text-center">
-  <v-dialog v-model="dialog" max-width="500px" transition="dialog-top-transition">
-    <div class="container">
-      <v-card prepend-icon="mdi-account" title="Perfil de Usuario" class="bg-yellow-lighten-5" style="max-height: 90vh; display: flex; flex-direction: column;">
-        <v-card-text style="overflow-y: auto;">
-          <v-row dense>
-            <v-col cols="12">
-              <v-text-field color="primary" label="Nombre*" required v-model="userEdit.name"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field color="primary" hint="El nombre de usuario es único" label="Usuario*" v-model="userEdit.usuario"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field color="primary" label="Contraseña*" type="password" required v-model="userEdit.pass"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field color="primary" label="Confirmar Contraseña*" type="password" required v-model="userEdit.pass1"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-checkbox v-model="userEdit.isAdmin" label="Administrador?" color="primary"></v-checkbox>
-            </v-col>
-          </v-row>
-          <small class="text-caption text-medium-emphasis">
-            <span class="text-red">* indica que los campos son requeridos</span>
-          </small>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
+      <v-card class="users-card" elevation="4">
+        <v-card-title class="card-header">
+          <v-icon large class="mr-2">mdi-account-group</v-icon>
+          Listado de Usuarios
           <v-spacer></v-spacer>
-          <v-btn text="Cerrar" variant="plain" color="danger" @click="closeEditModal()"></v-btn>
-          <v-btn color="primary" text="Guardar" variant="tonal" @click="submitEditForm"></v-btn>
-        </v-card-actions>
+          <v-btn
+              class="create-btn"
+              color="primary"
+              @click="openCreateModal"
+              prepend-icon="mdi-plus"
+          >
+            Crear Usuario
+          </v-btn>
+        </v-card-title>
+
+        <v-divider class="divider"></v-divider>
+
+        <v-table class="users-table">
+          <thead>
+          <tr>
+            <th class="text-center">No.</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Usuario</th>
+            <th class="text-center">Administrador</th>
+            <th class="text-center">Creado</th>
+            <th class="text-center">Modificado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr v-for="(item, a) in list" :key="a">
+            <td class="text-center">{{ a+1 }}</td>
+            <td class="text-center">{{ item.name }}</td>
+            <td class="text-center">{{ item.username }}</td>
+            <td class="text-center">
+              <v-chip :color="item.isAdmin ? 'primary' : 'secondary'" small>
+                {{ item.isAdmin ? 'Sí' : 'No' }}
+              </v-chip>
+            </td>
+            <td class="text-center">{{ formatDate(item.created.date) }}</td>
+            <td class="text-center">{{ formatDate(item.updated.date) }}</td>
+            <td class="text-center actions-cell">
+              <v-btn
+                  icon
+                  variant="text"
+                  color="primary"
+                  @click="openEditModal(item)"
+                  class="action-btn"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn
+                  icon
+                  variant="text"
+                  color="error"
+                  @click="openDialog(item)"
+                  class="action-btn"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+            </td>
+          </tr>
+          </tbody>
+        </v-table>
       </v-card>
+
+      <!-- Modal de Edición -->
+      <user-edit-modal
+          v-model="dialog"
+          :user="userEdit"
+          @submit="submitEditForm"
+          @close="closeEditModal"
+      />
+
+      <!-- Modal de Creación -->
+      <user-create-modal
+          v-model="create"
+          :user="userCreate"
+          @submit="submitCreateForm"
+          @close="closeCreatedModal"
+      ></user-create-modal>
+
+      <modal @delete="deleteUser" :user="usuarioDele" ref="Modal"></modal>
+      <alert v-model="changes" :tex="tex" :titu="titu" :typ="typ"></alert>
     </div>
-  </v-dialog>
-</div><!--Aqui termina el modal-->
-
-    <!--Aqui Empieza el modal-->
-    <div class="pa-4 text-center">
-  <v-dialog v-model="create" max-width="500px" transition="dialog-top-transition">
-    <div class="container">
-      <v-card prepend-icon="mdi-account" title="Crear Usuario" class="bg-yellow-lighten-5" style="max-height: 90vh; display: flex; flex-direction: column;">
-        <v-card-text style="overflow-y: auto;">
-          <v-row dense>
-            <v-col cols="12" md="12" sm="6">
-              <v-text-field color="primary" label="Nombre*" required v-model="userCreate.name"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="12" sm="6">
-              <v-text-field color="primary" hint="El nombre de usuario es único" label="Usuario*" v-model="userCreate.usuario"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="12" sm="6">
-              <v-text-field color="primary" label="Contraseña*" type="password" required v-model="userCreate.pass"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="12" sm="6">
-              <v-text-field color="primary" label="Confirmar Contraseña*" type="password" required v-model="userCreate.pass1"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="12" sm="6">
-              <v-checkbox v-model="userCreate.admin" label="Administrador?" color="primary"></v-checkbox>
-            </v-col>
-          </v-row>
-          <small class="text-caption text-medium-emphasis">
-            <span class="text-red">* indica que los campos son requeridos</span>
-          </small>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text="Cerrar" variant="plain" color="danger" @click="closeCreatedModal()"></v-btn>
-          <v-btn color="primary" text="Crear" variant="tonal" @click="submitCreateForm()"></v-btn>
-        </v-card-actions>
-      </v-card>
-    </div>
-  </v-dialog>
-</div><!--Aqui termina el modal--> 
-<modal @delete="deleteUser" :user="usuarioDele" ref="Modal"></modal>
-<alert v-model="changes" :tex="tex" :titu="titu" :typ="typ"></alert>
-
-  </div>  
-
-
+  </div>
 </template>
 
 <script>
@@ -188,191 +102,263 @@ import auth from '@/logic/auth'
 import carga from '@/components/LoadingComponent.vue'
 import modal from '@/components/ModalDeleteComponent.vue'
 import alert from '@/components/AlertComponent.vue'
+import userEditModal from "@/components/UserEditModal.vue";
+import userCreateModal from "@/components/UserCreateModal.vue";
 
 
 export default {
-    data(){
-    return{
-    list:[],
-    dialog: false,
-    showDelete:false,
-    userEdit:{
-      id:'',
-      name:'',
-      usuario:'',
-      pass:'',
-      pass1:'',
-      isAdmin: false,
-      
-    },
-    userCreate:{
-      id:'',
-      name:'',
-      usuario:'',
-      pass:'',
-      pass1:'',
-      admin: false,
-      
-    },
-    changes:false,
-    tex:'',
-    titu:'',
-    typ:'',
-    timeoutDuration:5000,
-    timerId:null,
-    loading:false,
-    usuarioDele:null,
-    create:false
+  data() {
+    return {
+      list: [],
+      dialog: false,
+      showDelete: false,
+      userEdit: {
+        id: '',
+        name: '',
+        usuario: '',
+        pass: '',
+        pass1: '',
+        isAdmin: false,
+      },
+      userCreate: {
+        id: '',
+        name: '',
+        usuario: '',
+        pass: '',
+        pass1: '',
+        admin: false,
+      },
+      changes: false,
+      tex: '',
+      titu: '',
+      typ: '',
+      timeoutDuration: 5000,
+      timerId: null,
+      loading: false,
+      usuarioDele: null,
+      create: false
     }
-   } ,
-    components:{ NavComponentVue,carga,modal,alert},
-    mounted()
-    {
-        this.getUsers()
+  },
+  components: { NavComponentVue, carga, modal, alert, userEditModal, userCreateModal },
+  mounted() {
+    this.getUsers()
+  },
+  methods: {
+    formatDate(dateString) {
+      if (!dateString) return ''
+      const date = new Date(dateString)
+      return date.toLocaleDateString()
     },
-    methods: {
-       async getUsers(){
-        try{
-          this.loading=true
-            const res = await auth.getUsers();
-            if(res.data.success)
-            {console.log(res.data.data);
-            this.loading=false
-            this.list=res.data.data
-            }
-            else
-            console.log('Algo salio mal en el if');
-            
-        }catch(error)
-        {
-            console.log('Algo salio mal');
+    async getUsers() {
+      try {
+        this.loading = true
+        const res = await auth.getUsers()
+        if (res.data.success) {
+          this.list = res.data.data
         }
-      },
+      } catch(error) {
+        console.error('Error al obtener usuarios:', error)
+      } finally {
+        this.loading = false
+      }
+    },
+    openEditModal(user) {
+      this.userEdit = {
+        id: user.id,
+        name: user.name,
+        usuario: user.username,
+        isAdmin: user.isAdmin,
+        pass: '',
+        pass1: ''
+      }
+      this.dialog = true
+    },
+    openCreateModal() {
+      this.create = true
+    },
+    async submitEditForm(editedUser) {
+      if (editedUser.pass !== editedUser.pass1) {
+        this.showAlert('Contraseña Incorrecta', 'error', 'Las contraseñas no coinciden')
+        return
+      }
 
-      openEditModal(user)
-      {
-        console.log(user);
-       this.userEdit={
-            id:user.id,
-            name:user.name,
-            usuario:user.username,
-            isAdmin:user.isAdmin,
-            pass:'',
-            pass1:''
-       }
-       this.dialog=true;
-      },
-      openCreateModal()
-      {
-       this.create=true;
-      },
-      async submitEditForm(){
-        if(this.userEdit.pass != this.userEdit.pass1)
-        {
-          this.showAlert()
-        this.tex='Las Contrasennas no coinciden'
-        this.titu='Contrasenna Incorrecta'
-        this.typ='error'
-        }
-        else{
-        const res= await auth.updateUser(this.userEdit.usuario,
-        this.userEdit.name,this.userEdit.pass,this.userEdit.isAdmin,this.userEdit.id);
-        console.log(res);
+      try {
+        await auth.updateUser(
+            editedUser.usuario,
+            editedUser.name,
+            editedUser.pass,
+            editedUser.isAdmin,
+            editedUser.id
+        )
         this.closeEditModal()
-        this.showAlert()
-        this.tex='Usuario ha sido actualizado satisfactoriamente'
-        this.titu='Usuario modificado'
-        this.typ='success'
+        this.showAlert('Usuario modificado', 'success', 'Usuario ha sido actualizado satisfactoriamente')
         this.getUsers()
-      }
-      },
-      async submitCreateForm(){
-        if(this.userCreate.usuario=='' || this.userCreate.name=='' || this.userCreate.pass=='' || 
-        this.userCreate.pass1=='')
-        {
-          this.showAlert()
-        this.tex='No puede haber campos vacios'
-        this.titu='Campos Vacios'
-        this.typ='error'
-        }
-        else if(this.userCreate.pass != this.userCreate.pass1)
-        {
-          this.showAlert()
-        this.tex='Las Contrasennas deben coincidir'
-        this.titu='Contrasenna Incorrecta'
-        this.typ='error'
-        }
-        else{
-        const res= await auth.createUser(this.userCreate.usuario,
-        this.userCreate.name,this.userCreate.pass,this.userCreate.admin);
-        console.log(res);
-        this.closeCreatedModal()
-        this.showAlert()
-        this.tex='Usuario ha sido Creado satisfactoriamente'
-        this.titu='Usuario Creado'
-        this.typ='success'
-        this.getUsers()
-      }
-      },
-      closeEditModal()
-      {
-        this.dialog=false
-        this.userEdit={
-          id:'',
-            name:'',
-            usuario:'',
-            admin:'',
-            pass:'',
-            pass1:''
-        }    
-      },
-      closeCreatedModal()
-      {
-        this.create=false
-        this.userEdit={
-          id:'',
-            name:'',
-            usuario:'',
-            admin:'',
-            pass:'',
-            pass1:''
-        }    
-      },
-
-      showAlert()
-      {
-        this.changes=true;
-        this.timerId=setTimeout(()=>{
-          this.closeAlert();
-        },this.timeoutDuration)
-      },
-
-      closeAlert(){
-        this.changes=false
-        clearTimeout(this.timerId)
-      },
-
-      openDialog(user){
-        this.usuarioDele=user
-        this.$refs.Modal.dialog=true
-      },
-
-      async deleteUser(user){
-        const respuesta = await auth.deleteUser(user.id)
-        if(respuesta.status)
-        console.log(respuesta);
-      this.showAlert()
-      this.tex='Usuario ha sido Eliminado satisfactoriamente'
-        this.titu='Usuario eliminado'
-        this.typ='success'
-        this.getUsers()
-      
-        console.log('Eliminando usuario', user);
+      } catch (error) {
+        this.showAlert('Error', 'error', 'No se pudo actualizar el usuario')
       }
     },
+    async submitCreateForm(newUser) {
+      if (!newUser.usuario || !newUser.name || !newUser.pass || !newUser.pass1) {
+        this.showAlert('Campos Vacíos', 'error', 'No puede haber campos vacíos')
+        return
+      }
+
+      if (newUser.pass !== newUser.pass1) {
+        this.showAlert('Contraseña Incorrecta', 'error', 'Las contraseñas deben coincidir')
+        return
+      }
+
+      try {
+        await auth.createUser(
+            newUser.usuario,
+            newUser.name,
+            newUser.pass,
+            newUser.isAdmin // Nota: debe ser `isAdmin`, no `admin`
+        )
+        this.closeCreatedModal()
+        this.showAlert('Usuario Creado', 'success', 'Usuario ha sido creado satisfactoriamente')
+        this.getUsers()
+      } catch (error) {
+        this.showAlert('Error', 'error', 'No se pudo crear el usuario')
+      }
+    },
+    closeEditModal() {
+      this.dialog = false
+      this.resetEditForm()
+    },
+    closeCreatedModal() {
+      this.create = false
+      this.resetCreateForm()
+    },
+    resetEditForm() {
+      this.userEdit = {
+        id: '',
+        name: '',
+        usuario: '',
+        isAdmin: false,
+        pass: '',
+        pass1: ''
+      }
+    },
+    resetCreateForm() {
+      this.userCreate = {
+        id: '',
+        name: '',
+        usuario: '',
+        admin: false,
+        pass: '',
+        pass1: ''
+      }
+    },
+    showAlert(titu, typ, tex) {
+      this.titu = titu
+      this.typ = typ
+      this.tex = tex
+      this.changes = true
+      this.timerId = setTimeout(this.closeAlert, this.timeoutDuration)
+    },
+    closeAlert() {
+      this.changes = false
+      clearTimeout(this.timerId)
+    },
+    openDialog(user) {
+      this.usuarioDele = user
+      this.$refs.Modal.dialog = true
+    },
+    async deleteUser(user) {
+      try {
+        await auth.deleteUser(user.id)
+        this.showAlert('Usuario eliminado', 'success', 'Usuario ha sido eliminado satisfactoriamente')
+        this.getUsers()
+      } catch (error) {
+        this.showAlert('Error', 'error', 'No se pudo eliminar el usuario')
+      }
+    }
+  }
 }
 </script>
 
-<style>
+<style scoped>
+.users-container {
+  min-height: 100vh;
+  background-color: #FFF9C4;
+  display: flex;
+  flex-direction: column;
+}
 
+.content-wrapper {
+  flex: 1;
+  padding: 24px;
+}
+
+.users-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #0D47A1;
+  color: white;
+  padding: 16px 24px;
+}
+
+.create-btn {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.divider {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.users-table {
+  width: 100%;
+}
+
+.users-table th {
+  background-color: #E3F2FD;
+  color: #0D47A1;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.users-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.users-table tr:hover {
+  background-color: #F5F5F5;
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.action-btn {
+  margin: 0 4px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .content-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-wrapper {
+    padding: 12px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .create-btn {
+    width: 100%;
+  }
+}
 </style>
